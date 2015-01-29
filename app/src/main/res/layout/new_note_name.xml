@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <org.droidparts.widget.ClearableEditText android:id="@+id/edit_note_name"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_gravity="left"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:hint="@string/new_note_name_input" />
+
+
+
+</LinearLayout>
