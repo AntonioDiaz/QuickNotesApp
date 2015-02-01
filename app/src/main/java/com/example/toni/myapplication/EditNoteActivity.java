@@ -128,6 +128,10 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         newNoteNameDialogFragment.show(getFragmentManager(), "note_name_dialog");
     }
 
+    /**
+     * Persist a note. If is a new note, before to save add a new note.
+     *
+     */
     private void saveNote() {
         EditText editText = (EditText) findViewById(R.id.edit_text);
         String newText = editText.getText().toString();

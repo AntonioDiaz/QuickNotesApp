@@ -3,6 +3,9 @@ package com.example.toni.myapplication.business;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,8 +16,13 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.json.JSONObject;
+
 
 /**
  * Created by toni on 18/01/2015.
@@ -31,12 +39,20 @@ public class NotesList implements Serializable {
     }
 
     public static NotesList recoverNotesListFromFile (Context context){
-        NotesList notesReaded;
+        NotesList notesReaded = new NotesList();
         try {
-            FileInputStream fileInputStream = context.openFileInput(NotesList.NOTES_LIST_FILE);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            notesReaded = (NotesList)objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            InputStream inputStream = context.openFileInput(NotesList.NOTES_LIST_FILE);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder everything = new StringBuilder();
+            String line;
+            while( (line = bufferedReader.readLine()) != null) {
+                everything.append(line);
+            }
+            Gson gson = new Gson();
+            Type collectionType = new TypeToken<List<Note>>(){}.getType();
+            notesReaded.notes = gson.fromJson(everything.toString(), collectionType);
+        } catch (Exception e) {
             notesReaded = new NotesList();
             Log.d(TAG, "recoverNotesListFromFile " + e.getMessage());
             e.printStackTrace();
@@ -67,8 +83,8 @@ public class NotesList implements Serializable {
     public Note addNote(String noteName, String noteText, Context context) throws IOException {
         Note note = new Note(noteName, this.nextNoteId());
         this.saveNote(note, noteText, context);
-        this.persitNotesList(context);
         notes.add(note);
+        this.persitNotesList(context);
         return note;
     }
 
@@ -82,6 +98,13 @@ public class NotesList implements Serializable {
         return maxId + 1;
     }
 
+    /**
+     * Save note in a file which name is the name of the note.
+     * @param note
+     * @param noteText
+     * @param context
+     * @throws IOException
+     */
     public void saveNote(Note note, String noteText, Context context) throws IOException {
         FileOutputStream fileOutputStream = context.openFileOutput(note.getId().toString(), Context.MODE_PRIVATE);
         fileOutputStream.write(noteText.getBytes());
@@ -126,11 +149,16 @@ public class NotesList implements Serializable {
         return notesNames;
     }
 
+    /**
+     * Save the list of notes in json format in a file called "notes_list.txt"
+     * @param context
+     */
     public void persitNotesList(Context context) {
         try {
             FileOutputStream fileOutputStream = context.openFileOutput(NOTES_LIST_FILE, Context.MODE_PRIVATE);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(this);
+            Gson gson = new Gson();
+            String listStr = gson.toJson(this.notes);
+            fileOutputStream.write(listStr.getBytes());
             fileOutputStream.close();
         } catch (IOException e) {
             Log.d(TAG, "saveNote" + e.getMessage());
@@ -144,4 +172,25 @@ public class NotesList implements Serializable {
                 "notes=" + notes +
                 '}';
     }
+
+
+    public static void main(String[] args) throws IOException {
+        List<Note> notesList = new ArrayList<>();
+        notesList.add(new Note("primera", 1));
+        notesList.add(new Note("segunda", 2));
+        Gson gson = new Gson();
+        System.out.println("empieza");
+        for (Note note : notesList) {
+            System.out.println("note -->" + note);
+            System.out.println(gson.toJson(note, Note.class));
+        }
+
+        String listStr = gson.toJson(notesList);
+        Type collectionType = new TypeToken<List<Note>>(){}.getType();
+        List<Note> lista = gson.fromJson(listStr, collectionType);
+        System.out.println(lista);
+        System.out.println(listStr);
+        System.out.println("jsonsss");
+    }
+
 }
