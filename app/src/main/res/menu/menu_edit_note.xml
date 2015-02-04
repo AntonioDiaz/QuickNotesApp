@@ -6,6 +6,14 @@
         android:title="@string/action_new"
         android:showAsAction="always" />
 
+    <item
+        android:id="@+id/action_share"
+        android:showAsAction="ifRoom"
+        android:title="Share"
+        android:actionProviderClass=
+            "android.widget.ShareActionProvider" />
+
+
     <item android:id="@+id/action_rename"
         android:title="@string/action_rename"
         android:showAsAction="never" />

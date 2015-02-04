@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,9 @@ public class MainActivity extends ListActivity {
         listValues = MainActivity.notesList.arrayNotes();
 
         if (listValues.length>0) {
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValues);
-            listView.setAdapter(arrayAdapter);
+            //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listValues);
+            BaseAdapter adapter = new ComplexListAdapter(this, MainActivity.notesList);
+            listView.setAdapter(adapter);
             listView.setVisibility(View.VISIBLE);
         } else {
             textView.setVisibility(View.VISIBLE);
@@ -79,7 +81,6 @@ public class MainActivity extends ListActivity {
         Intent intent = new Intent(this, EditNoteActivity.class);
         intent.putExtra(MainActivity.NOTE_NAME, listValues[position]);
         this.startActivity(intent);
-
     }
 
     private void createNewNote() {

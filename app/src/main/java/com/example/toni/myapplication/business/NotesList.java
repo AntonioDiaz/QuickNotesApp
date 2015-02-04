@@ -193,4 +193,13 @@ public class NotesList implements Serializable {
         System.out.println("jsonsss");
     }
 
+
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+
 }

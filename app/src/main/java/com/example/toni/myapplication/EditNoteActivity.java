@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.example.toni.myapplication.business.Note;
@@ -34,6 +35,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
     private static Note noteUpdate;
     private String temporalName;
     private Activity myActivity;
+    private ShareActionProvider mShareActionProvider;
 
 
     @Override
@@ -46,6 +48,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         String noteName = getIntent().getStringExtra(MainActivity.NOTE_NAME);
         /** checking if is a new note. */
         if (noteName!=null && noteName.length()>0) {
+            getActionBar().setTitle(noteName);
             noteUpdate = MainActivity.notesList.existNoteName(noteName);
             if (noteUpdate!=null) {
                 try {
@@ -65,8 +68,20 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_edit_note, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        mShareActionProvider = (ShareActionProvider)menuItem.getActionProvider();
+        mShareActionProvider.setShareIntent(getDefaultIntent());
         return super.onCreateOptionsMenu(menu);
     }
+
+    private Intent getDefaultIntent() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.setType("text/plain");
+        return sendIntent;
+    }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -139,6 +154,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
             if (this.noteUpdate==null) {
                 String newNoteName = this.temporalName!=null ? this.temporalName : getDefaultName();
                 this.noteUpdate = MainActivity.notesList.addNote(newNoteName, newText, this);
+                getActionBar().setTitle(newNoteName);
             } else {
                 MainActivity.notesList.saveNote(this.noteUpdate, newText, this);
             }
@@ -167,5 +183,6 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
             noteUpdate.setName(newName);
             MainActivity.notesList.persitNotesList(this);
         }
+        getActionBar().setTitle(newName);
     }
 }
