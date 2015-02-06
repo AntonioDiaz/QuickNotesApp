@@ -47,8 +47,13 @@ public class ComplexListAdapter extends BaseAdapter {
         } else {
             view = convertView;
         }
+
         TextView title = (TextView)view.findViewById(R.id.note_name);
         title.setText(notesList.getNotes().get(position).getName());
+        if (position==0) {
+            View viewDivisor = view.findViewById(R.id.head_divider);
+            viewDivisor.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 

@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_dark"
-    android:paddingBottom="5dp"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="5dp"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <View
+        android:id="@+id/head_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="invisible"
+        android:background="@android:color/white" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/note_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/background_dark"
-        android:textSize="20dp"
+        android:layout_margin="5dp"
+        android:textSize="20sp"
         android:text="@string/accept"
         android:gravity="center_vertical"
         android:textColor="@android:color/white" />
 
 
-</RelativeLayout>
+</LinearLayout>

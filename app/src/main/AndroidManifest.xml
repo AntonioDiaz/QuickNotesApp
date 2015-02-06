@@ -21,6 +21,7 @@
         <activity
             android:name=".EditNoteActivity"
             android:label="@string/title_activity_edit"
+            android:windowSoftInputMode="stateVisible"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

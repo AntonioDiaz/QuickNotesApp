@@ -55,6 +55,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                     String noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
                     EditText editText = (EditText) findViewById(R.id.edit_text);
                     editText.setText(noteFromFile);
+                    editText.setSelection(editText.getText().length());
                 } catch (IOException e) {
                     Toast.makeText(this, getString(R.string.error_read_note), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onCreate" + e.getMessage());
@@ -70,14 +71,15 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         menuInflater.inflate(R.menu.menu_edit_note, menu);
         MenuItem menuItem = menu.findItem(R.id.action_share);
         mShareActionProvider = (ShareActionProvider)menuItem.getActionProvider();
-        mShareActionProvider.setShareIntent(getDefaultIntent());
+        EditText editText = (EditText) findViewById(R.id.edit_text);
+        mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
         return super.onCreateOptionsMenu(menu);
     }
 
-    private Intent getDefaultIntent() {
+    private Intent getDefaultIntent(String text) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
         sendIntent.setType("text/plain");
         return sendIntent;
     }
@@ -124,8 +126,6 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                 myActivity.finish();
             }
         });
-
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -159,6 +159,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                 MainActivity.notesList.saveNote(this.noteUpdate, newText, this);
             }
             Toast.makeText(this, getString(R.string.saved_note), Toast.LENGTH_SHORT).show();
+            mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.error_save_note), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "saveNote" + e.getMessage());
@@ -185,4 +186,38 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         }
         getActionBar().setTitle(newName);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (this.hasChangeText()) {
+            Toast.makeText(this, "hasChanged", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "notHasChanged", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private boolean hasChangeText() {
+        boolean changed = false;
+        EditText editText = (EditText)findViewById(R.id.edit_text);
+        if (editText.getText().length()>0) {
+            if (this.noteUpdate==null){
+                changed = true;
+            } else {
+                String noteFromFile = null;
+                try {
+                    noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
+                } catch (IOException e) {
+                    Log.e(TAG, "hasChangedText" + e.getMessage());
+                    e.printStackTrace();
+                }
+                if (!editText.getText().toString().equals(noteFromFile)){
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
 }
