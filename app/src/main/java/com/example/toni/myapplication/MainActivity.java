@@ -3,20 +3,15 @@ package com.example.toni.myapplication;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.toni.myapplication.business.NotesList;
-
-import java.io.IOException;
 
 
 public class MainActivity extends ListActivity {
@@ -68,7 +63,8 @@ public class MainActivity extends ListActivity {
                 createNewNote();
                 break;
             case R.id.action_settings:
-                Toast.makeText(this, "hola SETTINGS", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, UserSettingActivity.class);
+                this.startActivity(intent);
                 break;
             default:
                 isValid = super.onOptionsItemSelected(item);

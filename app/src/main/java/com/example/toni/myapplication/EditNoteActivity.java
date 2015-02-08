@@ -6,8 +6,11 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -60,9 +63,9 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                     Toast.makeText(this, getString(R.string.error_read_note), Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onCreate" + e.getMessage());
                     e.printStackTrace();
-                    }
                 }
             }
+        }
     }
 
     @Override
@@ -73,8 +76,11 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         mShareActionProvider = (ShareActionProvider)menuItem.getActionProvider();
         EditText editText = (EditText) findViewById(R.id.edit_text);
         mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
+
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     private Intent getDefaultIntent(String text) {
         Intent sendIntent = new Intent();
@@ -90,6 +96,14 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         menu.findItem(R.id.action_delete).setEnabled(true);
         if (this.noteUpdate==null) {
             menu.findItem(R.id.action_delete).setEnabled(false);
+        }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean autoSave = preferences.getBoolean(getString(R.string.preference_key_save), true);
+        menu.findItem(R.id.action_save).setEnabled(true);
+        menu.findItem(R.id.action_save).setVisible(true);
+        if (autoSave) {
+            menu.findItem(R.id.action_save).setEnabled(false);
+            menu.findItem(R.id.action_save).setVisible(false);
         }
         return true;
     }
@@ -113,10 +127,11 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         return myReturn;
     }
 
+    /** Delete note from the phone. */
     private void deleteNote() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.delete_confirm);
         builder.setTitle(R.string.delete_note);
+        builder.setMessage(R.string.delete_confirm);
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) { }
         });
@@ -130,6 +145,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         dialog.show();
     }
 
+    /** Change the note name. */
     private void renameNote() {
         DialogFragment newNoteNameDialogFragment = new NewNoteNameDialogFragment();
         Bundle args = new Bundle();
@@ -143,30 +159,29 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         newNoteNameDialogFragment.show(getFragmentManager(), "note_name_dialog");
     }
 
-    /**
-     * Persist a note. If is a new note, before to save add a new note.
-     *
-     */
+    /** Persist a note. If is a new note, before to save add a new note. */
     private void saveNote() {
         EditText editText = (EditText) findViewById(R.id.edit_text);
         String newText = editText.getText().toString();
         try {
-            if (this.noteUpdate==null) {
-                String newNoteName = this.temporalName!=null ? this.temporalName : getDefaultName();
-                this.noteUpdate = MainActivity.notesList.addNote(newNoteName, newText, this);
-                getActionBar().setTitle(newNoteName);
+            if (this.hasChangeText()) {
+                if (this.noteUpdate==null) {
+                    String newNoteName = this.temporalName!=null ? this.temporalName : getDefaultName();
+                    this.noteUpdate = MainActivity.notesList.addNote(newNoteName, newText, this);
+                    getActionBar().setTitle(newNoteName);
+                } else {
+                    MainActivity.notesList.saveNote(this.noteUpdate, newText, this);
+                }
+                Toast.makeText(this, getString(R.string.saved_note), Toast.LENGTH_SHORT).show();
+                mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
             } else {
-                MainActivity.notesList.saveNote(this.noteUpdate, newText, this);
+                Toast.makeText(this, getString(R.string.saved_note_nothing), Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this, getString(R.string.saved_note), Toast.LENGTH_SHORT).show();
-            mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.error_save_note), Toast.LENGTH_SHORT).show();
             Log.d(TAG, "saveNote" + e.getMessage());
             e.printStackTrace();
         }
-
-
     }
 
     private String getDefaultName() {
@@ -187,21 +202,21 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         getActionBar().setTitle(newName);
     }
 
+
     @Override
     protected void onPause() {
-        super.onPause();
         if (this.hasChangeText()) {
-            Toast.makeText(this, "hasChanged", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "notHasChanged", Toast.LENGTH_SHORT).show();
-
+            this.saveNote();
         }
+        super.onPause();
     }
 
     private boolean hasChangeText() {
         boolean changed = false;
         EditText editText = (EditText)findViewById(R.id.edit_text);
+        /* if the user has write text. */
         if (editText.getText().length()>0) {
+            /* if the note is new and user hasn´t save it. */
             if (this.noteUpdate==null){
                 changed = true;
             } else {
@@ -212,6 +227,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                     Log.e(TAG, "hasChangedText" + e.getMessage());
                     e.printStackTrace();
                 }
+                /* if the text of the note is distinct from the text of the input. */
                 if (!editText.getText().toString().equals(noteFromFile)){
                     changed = true;
                 }
@@ -219,5 +235,4 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         }
         return changed;
     }
-
 }

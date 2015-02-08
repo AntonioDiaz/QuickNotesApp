@@ -123,9 +123,13 @@ public class NotesList implements Serializable {
             InputStream inputStream = context.openFileInput(note.getId().toString());
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                noteContent.append(line + LINE_SEPARATOR);
+            String line = bufferedReader.readLine();
+            while (line != null) {
+                noteContent.append(line);
+                line = bufferedReader.readLine();
+                if (line !=null) {
+                    noteContent.append(LINE_SEPARATOR);
+                }
             }
             inputStream.close();
         }

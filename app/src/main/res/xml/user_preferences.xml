@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/user_settings"
+        android:key="pref_key_storage_settings">
+    <CheckBoxPreference
+        android:key="@string/preference_key_save"
+        android:title="@string/settings_save_note"
+        android:summary="@string/settings_save_note_summary"
+        android:defaultValue="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

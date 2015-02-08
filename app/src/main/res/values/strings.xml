@@ -24,6 +24,14 @@
     <string name="name_exists">There is a note with this name</string>
     <string name="delete_confirm">Note is going to be delete, do you want continue?</string>
     <string name="delete_note">Delete note</string>
+    <string name="confirm_exit_title">Save note</string>
+    <string name="confirm_exit_message">Note has changed, do yo want to save it before exit?</string>
+    <string name="saved_note_nothing">Nothing to save.</string>
+    <string name="user_settings">User settings</string>
+    <string name="settings_save_note">Save note</string>
+    <string name="settings_save_note_summary">Save the note automatically</string>
+    <string name="title_activity_settings">User settings</string>
+    <string name="preference_key_save">preference_save</string>
 
 
 </resources>
