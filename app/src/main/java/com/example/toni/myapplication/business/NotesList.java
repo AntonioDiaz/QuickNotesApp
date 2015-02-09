@@ -52,6 +52,9 @@ public class NotesList implements Serializable {
             Gson gson = new Gson();
             Type collectionType = new TypeToken<List<Note>>(){}.getType();
             notesReaded.notes = gson.fromJson(everything.toString(), collectionType);
+            if (notesReaded.notes == null) {
+                notesReaded = new NotesList();
+            }
         } catch (Exception e) {
             notesReaded = new NotesList();
             Log.d(TAG, "recoverNotesListFromFile " + e.getMessage());

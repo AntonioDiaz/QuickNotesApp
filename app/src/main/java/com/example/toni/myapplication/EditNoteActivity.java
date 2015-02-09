@@ -214,23 +214,23 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
     private boolean hasChangeText() {
         boolean changed = false;
         EditText editText = (EditText)findViewById(R.id.edit_text);
-        /* if the user has write text. */
-        if (editText.getText().length()>0) {
-            /* if the note is new and user hasn´t save it. */
-            if (this.noteUpdate==null){
+        /* if the note is new and user hasn´t save it. */
+        if (this.noteUpdate==null) {
+            /* if the user has write text. */
+            if (editText.getText().length()>0) {
                 changed = true;
-            } else {
-                String noteFromFile = null;
-                try {
-                    noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
-                } catch (IOException e) {
-                    Log.e(TAG, "hasChangedText" + e.getMessage());
-                    e.printStackTrace();
-                }
-                /* if the text of the note is distinct from the text of the input. */
-                if (!editText.getText().toString().equals(noteFromFile)){
-                    changed = true;
-                }
+            }
+        } else {
+            String noteFromFile = null;
+            try {
+                noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
+            } catch (IOException e) {
+                Log.e(TAG, "hasChangedText" + e.getMessage());
+                e.printStackTrace();
+            }
+            /* if the text of the note is distinct from the text of the input. */
+            if (!editText.getText().toString().equals(noteFromFile)){
+                changed = true;
             }
         }
         return changed;

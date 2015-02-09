@@ -11,6 +11,7 @@ public class UserSettingActivity extends PreferenceActivity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         addPreferencesFromResource(R.xml.user_preferences);
     }
 }
