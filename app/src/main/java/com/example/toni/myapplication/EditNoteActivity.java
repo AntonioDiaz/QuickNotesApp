@@ -137,7 +137,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         });
         builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                MainActivity.notesList.deleteNote(noteUpdate, myActivity);
+                boolean deleteNote = MainActivity.notesList.deleteNote(noteUpdate, myActivity);
                 myActivity.finish();
             }
         });
@@ -221,16 +221,18 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                 changed = true;
             }
         } else {
-            String noteFromFile = null;
-            try {
-                noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
-            } catch (IOException e) {
-                Log.e(TAG, "hasChangedText" + e.getMessage());
-                e.printStackTrace();
-            }
-            /* if the text of the note is distinct from the text of the input. */
-            if (!editText.getText().toString().equals(noteFromFile)){
-                changed = true;
+            if (MainActivity.notesList.existNoteName(noteUpdate.getName())!=null) {
+                String noteFromFile = null;
+                try {
+                    noteFromFile = MainActivity.notesList.readNoteFromFile(noteUpdate.getName(), this);
+                } catch (IOException e) {
+                    Log.e(TAG, "hasChangedText" + e.getMessage());
+                    e.printStackTrace();
+                }
+                /* if the text of the note is distinct from the text of the input. */
+                if (!editText.getText().toString().equals(noteFromFile)) {
+                    changed = true;
+                }
             }
         }
         return changed;
