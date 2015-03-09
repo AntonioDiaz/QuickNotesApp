@@ -39,7 +39,7 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
     private String temporalName;
     private Activity myActivity;
     private ShareActionProvider mShareActionProvider;
-
+    boolean autoSave = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,13 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        autoSave = preferences.getBoolean(getString(R.string.preference_key_save), true);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_edit_note, menu);
@@ -76,7 +83,6 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         mShareActionProvider = (ShareActionProvider)menuItem.getActionProvider();
         EditText editText = (EditText) findViewById(R.id.edit_text);
         mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -97,8 +103,6 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
         if (this.noteUpdate==null) {
             menu.findItem(R.id.action_delete).setEnabled(false);
         }
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean autoSave = preferences.getBoolean(getString(R.string.preference_key_save), true);
         menu.findItem(R.id.action_save).setEnabled(true);
         menu.findItem(R.id.action_save).setVisible(true);
         if (autoSave) {
@@ -172,10 +176,14 @@ public class EditNoteActivity  extends Activity implements NewNoteNameDialogFrag
                 } else {
                     MainActivity.notesList.saveNote(this.noteUpdate, newText, this);
                 }
-                Toast.makeText(this, getString(R.string.saved_note), Toast.LENGTH_SHORT).show();
+                if (!autoSave) {
+                    Toast.makeText(this, getString(R.string.saved_note), Toast.LENGTH_SHORT).show();
+                }
                 mShareActionProvider.setShareIntent(getDefaultIntent(editText.getText().toString()));
             } else {
-                Toast.makeText(this, getString(R.string.saved_note_nothing), Toast.LENGTH_SHORT).show();
+                if (!autoSave) {
+                    Toast.makeText(this, getString(R.string.saved_note_nothing), Toast.LENGTH_SHORT).show();
+                }
             }
         } catch (IOException e) {
             Toast.makeText(this, getString(R.string.error_save_note), Toast.LENGTH_SHORT).show();

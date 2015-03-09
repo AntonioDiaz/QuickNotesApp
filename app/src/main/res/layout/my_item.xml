@@ -32,9 +32,9 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:background="@android:color/background_dark"
             android:textSize="14dp"
             android:text="@string/creation_date"
@@ -44,7 +44,7 @@
             android:id="@+id/creation_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@android:color/background_dark"
             android:textSize="14dp"
             android:text="@string/creation_date"
@@ -60,9 +60,9 @@
         android:layout_marginRight="5dp"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:background="@android:color/background_dark"
             android:textSize="14dp"
             android:text="@string/modification_date"
@@ -72,7 +72,7 @@
             android:id="@+id/modification_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@android:color/background_dark"
             android:textSize="14dp"
             android:text="@string/modification_date"

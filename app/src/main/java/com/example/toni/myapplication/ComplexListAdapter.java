@@ -59,9 +59,8 @@ public class ComplexListAdapter extends BaseAdapter {
         }
         textView = (TextView)view.findViewById(R.id.creation_date);
         Date myDate = notesList.getNotes().get(position).getDateCreation();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         if (myDate!=null) {
-            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             textView.setText(dateFormat.format(myDate));
         } else {
             textView.setText("");
@@ -69,7 +68,6 @@ public class ComplexListAdapter extends BaseAdapter {
         textView = (TextView)view.findViewById(R.id.modification_date);
         myDate = notesList.getNotes().get(position).getDateModification();
         if (myDate!=null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             textView.setText(dateFormat.format(myDate));
         } else {
             textView.setText("");

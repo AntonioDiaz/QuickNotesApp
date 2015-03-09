@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -109,8 +110,10 @@ public class NotesList implements Serializable {
      * @throws IOException
      */
     public void saveNote(Note note, String noteText, Context context) throws IOException {
+        note.setDateModification(new Date());
         FileOutputStream fileOutputStream = context.openFileOutput(note.getId().toString(), Context.MODE_PRIVATE);
         fileOutputStream.write(noteText.getBytes());
+        this.persitNotesList(context);
         fileOutputStream.close();
     }
 
