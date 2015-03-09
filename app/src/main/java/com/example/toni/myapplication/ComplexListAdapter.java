@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import com.example.toni.myapplication.business.NotesList;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by antonio on 02/02/2015.
  */
@@ -48,12 +51,31 @@ public class ComplexListAdapter extends BaseAdapter {
             view = convertView;
         }
 
-        TextView title = (TextView)view.findViewById(R.id.note_name);
-        title.setText(notesList.getNotes().get(position).getName());
+        TextView textView = (TextView)view.findViewById(R.id.note_name);
+        textView.setText(notesList.getNotes().get(position).getName());
         if (position==0) {
             View viewDivisor = view.findViewById(R.id.head_divider);
             viewDivisor.setVisibility(View.VISIBLE);
         }
+        textView = (TextView)view.findViewById(R.id.creation_date);
+        Date myDate = notesList.getNotes().get(position).getDateCreation();
+        if (myDate!=null) {
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            textView.setText(dateFormat.format(myDate));
+        } else {
+            textView.setText("");
+        }
+        textView = (TextView)view.findViewById(R.id.modification_date);
+        myDate = notesList.getNotes().get(position).getDateModification();
+        if (myDate!=null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            textView.setText(dateFormat.format(myDate));
+        } else {
+            textView.setText("");
+        }
+
+
         return view;
     }
 

@@ -32,6 +32,8 @@
     <string name="settings_save_note_summary">Save the note automatically</string>
     <string name="title_activity_settings">User settings</string>
     <string name="preference_key_save">preference_save</string>
+    <string name="creation_date">Created</string>
+    <string name="modification_date">Modified</string>
 
 
 </resources>
