@@ -59,7 +59,7 @@ public class ComplexListAdapter extends BaseAdapter {
         }
         textView = (TextView)view.findViewById(R.id.creation_date);
         Date myDate = notesList.getNotes().get(position).getDateCreation();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (myDate!=null) {
             textView.setText(dateFormat.format(myDate));
         } else {
