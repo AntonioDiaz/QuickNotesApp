@@ -62,6 +62,7 @@ function fSaveEditor() {
 		alert ('maximum size exceeded');
 	} else {
 		myText.value = editor.getValue();
+        window.onbeforeunload = null;
 		document.forms['myForm'].submit();
 	}
 }
@@ -71,8 +72,44 @@ function hasChangedText(){
     var newHash = hashCode(editor.getValue());
     return oldHash!=newHash;
 }
+/*
+$(document).keypress(function(e){
+    console.log("keypress - " + editor.getValue());
+    console.log("keypress - " + ( e.which === 90 && e.ctrlKey ));
+});
 
+$(document).keyup(function(e){
+    if (e.which === 90 && e.ctrlKey && e.shiftKey) {
+        console.log('keyup + shift + z');
+    } else if( e.which === 90 && e.ctrlKey ) {
+        e.preventDefault();
+        console.log("keyUp ctr+z --> " + editor.getValue());
+    }
+});
 
+$(document).keydown(function(e){
+    if (e.which === 90 && e.ctrlKey && e.shiftKey) {
+        console.log('control + shift + z');
+    } else if( e.which === 90 && e.ctrlKey ) {
+        //e.preventDefault();
+        console.log("3 - " + editor.getValue());
+        console.log('control + z');
+    }
+});
+*/
+
+/*
+function KeyPress(e) {
+    console.log("1 - " + editor.getValue());
+    var evtobj = window.event? event : e;
+    console.log("2 - " + editor.getValue());
+    if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+        console.log("3 - " + editor.getValue());
+    }
+}
+
+document.onkeydown = KeyPress;
+*/
 /*
 $(document).ready(function() {
     console.log( "ready!!!!!" + editor);

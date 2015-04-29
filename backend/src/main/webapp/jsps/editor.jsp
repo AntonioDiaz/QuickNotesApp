@@ -19,7 +19,7 @@
         <tr>
             <td width="2%">&nbsp;</td>
             <td>
-                <div style="font-weight: normal;" id='save_button'><a href="javascript: fSaveEditor()">guardar</a></div>
+                <a href="javascript: fSaveEditor()"><div id='save_button'>guardar</div></a>
             </td>
         </tr>
     </table>
@@ -47,13 +47,14 @@
         editor.on("change", function(cm, change) {
             if (hasChangedText()) {
                 //console.log('distintos ' + $('#save_button').css('font-weight', 'bold');
-                $('#save_button').css('font-weight', 'bold');
+                $('#save_button').text('guardar*');
             } else {
-                $('#save_button').css('font-weight', 'normal');
+                $('#save_button').text('guardar');
             }
         });
         var myHash = hashCode(editor.getValue());
         $('#myHashOriginal').val(myHash);
+        editor.focus();
     };
 
     $(window).keydown(function(event) {
@@ -62,5 +63,21 @@
             event.preventDefault();
         }
     });
+
+
+    window.onbeforeunload = function (event) {
+        if (hasChangedText()) {
+            var message = 'Please click on \'Save\' button to leave this page.';
+            if (typeof event == 'undefined') {
+                event = window.event;
+            }
+            if (event) {
+                event.returnValue = message;
+            }
+            return message;
+        }
+    };
+
+
 </script>
 </html>
