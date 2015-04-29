@@ -17,7 +17,7 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'appengine'
-//apply plugin: 'groovy'
+apply plugin: 'groovy'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
@@ -36,11 +36,12 @@ dependencies {
     compile 'com.google.appengine.orm:datanucleus-appengine:2.1.2'
     compile 'commons-codec:commons-codec:1.10'
     compile 'org.apache.commons:commons-lang3:3.3.2'
+    compile 'com.googlecode.objectify:objectify:5.0.3'
 }
 
 appengine {
     downloadSdk = true
-    //warDir = file('src/main/webapp')
+    warDir = file('src/main/webapp')
     appcfg {
         oauth2 = true
     }
@@ -50,4 +51,4 @@ appengine {
         enhanceOnBuild = true
     }
 }
-//sourceSets.main.output.classesDir = 'src/main/webapp/WEB-INF/classes'
+sourceSets.main.output.classesDir = 'src/main/webapp/WEB-INF/classes'
