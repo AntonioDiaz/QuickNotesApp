@@ -41,9 +41,9 @@
             mode: "text/html'd",
             styleActiveLine: true,
             lineNumbers: true,
+            value: decodeEntities("<c:out value="${NOTE_TEXT}"></c:out>")
         });
         editor.setSize('100%', getHeight()-40);
-        editor.setValue(decodeEntities("<c:out value="${NOTE_TEXT}"></c:out>"));
         editor.on("change", function(cm, change) {
             if (hasChangedText()) {
                 //console.log('distintos ' + $('#save_button').css('font-weight', 'bold');
